@@ -1,0 +1,3 @@
+# RayTracer
+
+Simple RayTracer to have fun with rust language ... 
