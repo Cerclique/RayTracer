@@ -19,6 +19,16 @@ impl Ray {
 }
 
 impl Ray {
+    pub fn origin(self) -> Point3D {
+        self.origin
+    }
+
+    pub fn direction(self) -> Vector3D {
+        self.direction
+    }
+}
+
+impl Ray {
     pub fn at(self, t: f64) -> Point3D {
         self.origin + Point3D::from_vector3d(self.direction * t)
     }
