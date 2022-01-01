@@ -16,9 +16,9 @@ impl PPMWriter {
             for i in 0..img_w {
                 let pixel_color = buf[(i + j * img_w) as usize];
 
-                let ir = (255.999 * pixel_color.r()) as u8;
-                let ig = (255.999 * pixel_color.g()) as u8;
-                let ib = (255.999 * pixel_color.b()) as u8;
+                let ir = (255.0 * pixel_color.r()) as u8;
+                let ig = (255.0 * pixel_color.g()) as u8;
+                let ib = (255.0 * pixel_color.b()) as u8;
 
                 f.write_all(format!("{} {} {}\n", ir, ig, ib).as_bytes())?;
             }

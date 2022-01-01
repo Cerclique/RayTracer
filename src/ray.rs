@@ -25,14 +25,17 @@ impl Ray {
 
     pub fn color(self) -> Color {
         let obj = Sphere::new(Point3D::new(0.0, 0.0, -1.0), 0.5);
-        if self.hit_sphere(obj) {
-            return Color::new(1.0, 0.0, 0.0);
+        let t = self.hit_sphere(obj);
+        if t > 0.0 {
+            let normal_vec = (Vector3D::from_point3d(self.at(t)) - Vector3D::new(0.0, 0.0, -1.0)).unit();
+            let color = Color::new(normal_vec.x() + 1.0, normal_vec.y() + 1.0, normal_vec.z() + 1.0) * 0.5;
+            return color;
         }
         let t = (self.direction.unit().y() + 1.0) * 0.5;
         Color::new(1.0, 1.0, 1.0) * (1.0 - t) + Color::new(0.5, 0.7, 1.0) * t
     }
 
-    pub fn hit_sphere(self, obj: Sphere) -> bool {
+    pub fn hit_sphere(self, obj: Sphere) -> f64 {
         let oc = Vector3D::from_point3d(self.origin - obj.center());
         let a = self.direction.dot(self.direction);
         let b = oc.dot(self.direction) * 2.0;
@@ -40,6 +43,10 @@ impl Ray {
 
         let discriminant = (b * b) - (4.0 * a * c);
 
-        discriminant > 0.0
+        if discriminant < 0.0 {
+            return -1.0;
+        } else {
+            return (-b - discriminant.sqrt()) / (2.0 * a);
+        }
     }
 }
