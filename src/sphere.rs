@@ -50,8 +50,13 @@ impl Hittable for Sphere {
         }
 
         let hit_point = r.at(root);
-        let normal_vec = Vector3D::from_point3d((hit_point - self.center) / self.radius);
+        let mut normal_vec = Vector3D::from_point3d((hit_point - self.center) / self.radius);
+        
+        let front_face = r.direction().dot(normal_vec) < 0.0;
+        if !front_face {
+            normal_vec = -normal_vec;
+        }
 
-        Some(HitRecord::new(hit_point, normal_vec, root))
+        Some(HitRecord::new(hit_point, normal_vec, root, front_face))
     }
 }

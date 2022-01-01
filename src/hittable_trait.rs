@@ -6,12 +6,13 @@ use crate::ray::Ray;
 pub struct HitRecord {
     hit_point: Point3D,
     normal_vec: Vector3D,
-    t: f64
+    t: f64,
+    front_face: bool
 }
 
 impl HitRecord {
-    pub fn new(hit_point: Point3D, normal_vec: Vector3D, t: f64) -> HitRecord{
-        HitRecord {hit_point, normal_vec, t}
+    pub fn new(hit_point: Point3D, normal_vec: Vector3D, t: f64, front_face: bool) -> HitRecord{
+        HitRecord {hit_point, normal_vec, t, front_face}
     }
 }
 
