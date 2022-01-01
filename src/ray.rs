@@ -37,16 +37,16 @@ impl Ray {
 
     pub fn hit_sphere(self, obj: Sphere) -> f64 {
         let oc = Vector3D::from_point3d(self.origin - obj.center());
-        let a = self.direction.dot(self.direction);
-        let b = oc.dot(self.direction) * 2.0;
-        let c = oc.dot(oc) - obj.radius() * obj.radius();
+        let a = self.direction.length_squared();
+        let half_b = oc.dot(self.direction);
+        let c = oc.length_squared() - obj.radius() * obj.radius();
 
-        let discriminant = (b * b) - (4.0 * a * c);
+        let discriminant = (half_b * half_b) - (a * c);
 
         if discriminant < 0.0 {
             return -1.0;
         } else {
-            return (-b - discriminant.sqrt()) / (2.0 * a);
+            return (-half_b - discriminant.sqrt()) / a;
         }
     }
 }
