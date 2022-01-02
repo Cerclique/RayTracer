@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 geometry3d = { path = "./../geometry3d" }
+rand = "0.8.4"

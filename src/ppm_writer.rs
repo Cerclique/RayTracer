@@ -6,7 +6,7 @@ use crate::color::Color;
 pub struct PPMWriter {}
 
 impl PPMWriter {
-    pub fn write_to_file(path: &str, img_w: u32, img_h: u32, buf: &[Color], ) -> Result<(), std::io::Error> {
+    pub fn write_to_file(path: &str, img_w: u32, img_h: u32, buf: &[Color], sample_per_pixels: u32) -> Result<(), std::io::Error> {
         let f = File::create(path)?;
         let mut f = BufWriter::new(f);
 
@@ -14,16 +14,29 @@ impl PPMWriter {
 
         for j in 0..img_h {
             for i in 0..img_w {
-                let pixel_color = &buf[(i + j * img_w) as usize];
+                let mut pixel_color = buf[(i + j * img_w) as usize];
 
-                let ir = (255.0 * pixel_color.r()) as u8;
-                let ig = (255.0 * pixel_color.g()) as u8;
-                let ib = (255.0 * pixel_color.b()) as u8;
+                let scale = 1.0 / sample_per_pixels as f64;
+                pixel_color *= scale;
 
-                f.write_all(format!("{} {} {}\n", ir, ig, ib).as_bytes())?;
+                let ir = (256.0 * clamp(pixel_color.r(), 0.0, 0.999)) as u8;
+                let ig = (256.0 * clamp(pixel_color.g(), 0.0, 0.999)) as u8;
+                let ib = (256.0 * clamp(pixel_color.b(), 0.0, 0.999)) as u8;
+            f.write_all(format!("{} {} {}\n", ir, ig, ib).as_bytes())?;
             }
         }
 
         Ok(())
     }
+}
+
+fn clamp(value: f64, min: f64, max: f64) -> f64 {
+    if value < min {
+        return min;
+    }
+    else if value > max {
+        return max
+    }
+
+    value
 }

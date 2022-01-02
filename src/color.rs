@@ -1,5 +1,6 @@
-use std::ops::{Add, Mul};
+use std::ops::{Add, AddAssign, Mul, MulAssign};
 
+#[derive(Copy, Clone)]
 pub struct Color {
     r: f64,
     g: f64,
@@ -9,6 +10,10 @@ pub struct Color {
 impl Color {
     pub fn new(r: f64, g: f64, b: f64) -> Color {
         Color {r, g, b}
+    }
+
+    pub fn zeroes() -> Color {
+        Color {r: 0.0, g: 0.0, b: 0.0}
     }
 }
 
@@ -34,10 +39,22 @@ impl Add<Color> for Color {
     }
 }
 
+impl AddAssign<Color> for Color {
+    fn add_assign(&mut self, rhs: Color) {
+        *self = Color::new(self.r + rhs.r, self.g + rhs.g, self.b + rhs.b);
+    }
+}
+
 impl Mul<f64> for Color {
     type Output = Color;
 
     fn mul(self, rhs: f64) -> Color {
         Color::new(self.r * rhs, self.g * rhs, self.b * rhs)
+    }
+}
+
+impl MulAssign<f64> for Color {
+    fn mul_assign(&mut self, rhs: f64) {
+        *self = Color::new(self.r * rhs, self.g * rhs, self.b * rhs);
     }
 }
