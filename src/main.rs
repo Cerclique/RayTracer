@@ -6,15 +6,26 @@ mod ppm_writer;
 mod ray;
 mod sphere;
 
+mod hitrecord;
+mod hittable_trait;
+mod hittable_list;
+
 use color::Color;
 use ppm_writer::PPMWriter;
 use ray::Ray;
+use sphere::Sphere;
+use hittable_list::HittableList;
 
 fn main() {
     // Image
     let aspect_ratio = 16.0 / 9.0;
     let image_width: u32 = 1280;
     let image_height = (image_width as f64 / aspect_ratio) as u32;
+
+    // World
+    let mut world = HittableList::new();
+    world.add(Sphere::new(Point3D::new(0.0, 0.0, -1.0), 0.5));
+    world.add(Sphere::new(Point3D::new(0.0, -100.5, -1.0), 100.0));
 
     // Camera
     let viewport_height = 2.0;
@@ -36,7 +47,7 @@ fn main() {
             let v = j as f64 / (image_height - 1) as f64;
 
             let dir = Vector3D::from_point3d(lower_left_corner + horizontal * u + vertical * v - origin);
-            pixels.push(Ray::new(origin, dir).color());
+            pixels.push(Ray::new(origin, dir).color(&world));
         }
     }
 

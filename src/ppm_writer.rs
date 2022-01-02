@@ -14,7 +14,7 @@ impl PPMWriter {
 
         for j in 0..img_h {
             for i in 0..img_w {
-                let pixel_color = buf[(i + j * img_w) as usize];
+                let pixel_color = &buf[(i + j * img_w) as usize];
 
                 let ir = (255.0 * pixel_color.r()) as u8;
                 let ig = (255.0 * pixel_color.g()) as u8;

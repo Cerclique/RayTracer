@@ -1,6 +1,5 @@
 use std::ops::{Add, Mul};
 
-#[derive(Debug, Copy, Clone)]
 pub struct Color {
     r: f64,
     g: f64,
@@ -14,15 +13,15 @@ impl Color {
 }
 
 impl Color {
-    pub fn r(self) -> f64 {
+    pub fn r(&self) -> f64 {
         self.r
     }
 
-    pub fn g(self) -> f64 {
+    pub fn g(&self) -> f64 {
         self.g
     }
 
-    pub fn b(self) -> f64 {
+    pub fn b(&self) -> f64 {
         self.b
     }
 }
