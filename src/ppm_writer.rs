@@ -14,15 +14,19 @@ impl PPMWriter {
 
         for j in 0..img_h {
             for i in 0..img_w {
-                let mut pixel_color = buf[(i + j * img_w) as usize];
-
+                let pixel_color = &buf[(i + j * img_w) as usize];
+                
                 let scale = 1.0 / sample_per_pixels as f64;
-                pixel_color *= scale;
 
-                let ir = (256.0 * clamp(pixel_color.r(), 0.0, 0.999)) as u8;
-                let ig = (256.0 * clamp(pixel_color.g(), 0.0, 0.999)) as u8;
-                let ib = (256.0 * clamp(pixel_color.b(), 0.0, 0.999)) as u8;
-            f.write_all(format!("{} {} {}\n", ir, ig, ib).as_bytes())?;
+                let r = (pixel_color.r() * scale).sqrt();
+                let g = (pixel_color.g() * scale).sqrt();
+                let b = (pixel_color.b() * scale).sqrt();
+                
+                let ir = (256.0 * clamp(r, 0.0, 0.999)) as u8;
+                let ig = (256.0 * clamp(g, 0.0, 0.999)) as u8;
+                let ib = (256.0 * clamp(b, 0.0, 0.999)) as u8;
+
+                f.write_all(format!("{} {} {}\n", ir, ig, ib).as_bytes())?;
             }
         }
 
@@ -35,7 +39,7 @@ fn clamp(value: f64, min: f64, max: f64) -> f64 {
         return min;
     }
     else if value > max {
-        return max
+        return max;
     }
 
     value

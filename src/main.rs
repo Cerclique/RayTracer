@@ -22,7 +22,8 @@ fn main() {
     let aspect_ratio = 16.0 / 9.0;
     let image_width: u32 = 1280;
     let image_height = (image_width as f64 / aspect_ratio) as u32;
-    let sample_per_pixels = 1;
+    let sample_per_pixels = 100;
+    let max_depth: i32 = 50;
 
     // World
     let mut world = HittableList::new();
@@ -44,7 +45,7 @@ fn main() {
                 let u = ((i as f64) + randf()) / (image_width - 1) as f64;
                 let v = ((j as f64) + randf()) / (image_height - 1) as f64;
                 let r = cam.get_ray(u, v);
-                pixel_color += r.color(&world);
+                pixel_color += r.color(&world, max_depth);
             }
             pixels.push(pixel_color);
         }

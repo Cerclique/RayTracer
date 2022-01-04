@@ -18,12 +18,12 @@ impl Sphere {
 
 impl Hittable for Sphere {
     fn hit(&self, r: &Ray, t_min: f64, t_max: f64) -> Option<HitRecord> {
-        let oc = Vector3D::from_point3d(*&r.origin() - self.center);
+        let oc = Vector3D::from_point3d(r.origin() - self.center);
         let a = r.direction().length_squared();
         let half_b = oc.dot(r.direction());
-        let c = oc.length_squared() - self.radius.powi(2);
+        let c = oc.length_squared() - self.radius * self.radius;
 
-        let discriminant = half_b.powi(2) - a * c;
+        let discriminant = half_b * half_b - a * c;
         
         if discriminant < 0.0 {
             return None;
@@ -31,10 +31,10 @@ impl Hittable for Sphere {
 
         let sqrd = discriminant.sqrt();
 
-        let root = (-half_b - sqrd) / a;
-        if root  < t_min || root > t_max {
-            let root = (-half_b + sqrd) / a;
-            if root  < t_min || root > t_max {
+        let mut root = (-half_b - sqrd) / a;
+        if root < t_min || t_max < root {
+            root = (-half_b + sqrd) / a;
+            if root < t_min || t_max < root {
                 return None;
             }
         }
@@ -46,7 +46,7 @@ impl Hittable for Sphere {
         if !front_face {
             normal_vec = -normal_vec;
         }
-
+        
         Some(HitRecord::new(hit_point, normal_vec, root, front_face))
     }
 }

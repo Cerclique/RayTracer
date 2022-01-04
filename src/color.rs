@@ -13,7 +13,11 @@ impl Color {
     }
 
     pub fn zeroes() -> Color {
-        Color {r: 0.0, g: 0.0, b: 0.0}
+        Color::new(0.0, 0.0, 0.0)
+    }
+
+    pub fn ones() -> Color {
+        Color::new(1.0, 1.0, 1.0)
     }
 }
 

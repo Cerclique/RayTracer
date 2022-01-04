@@ -23,4 +23,8 @@ impl HitRecord {
     pub fn normal_vec(&self) -> Vector3D {
         self.normal_vec
     }
+
+    pub fn hit_point(&self) -> Point3D {
+        self.hit_point
+    }
 }
